@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modal songwriting workbench</title>
+  <link rel="stylesheet" href="modal-workbench.css">
+  <script src="modal-workbench.js" defer></script>
+</head>
+<body>
+<section id="modal-writing-desk" aria-label="Modal songwriting workbench">
+  <header class="mw-top"><h2>Chord library</h2></header>
+  <div class="mw-tools mw-library-tools">
+    <div class="mw-view"><span>View</span><div role="group" aria-label="Library view"><button type="button" data-layout="circle" aria-pressed="true">Circle of fifths</button><button type="button" data-layout="table" aria-pressed="false">Mode table</button></div></div>
+    <label>Modes<select data-field="view"><option value="r">Relative modes</option><option value="p">Parallel modes</option></select></label>
+    <label>Scale<select data-field="scale"></select></label>
+    <label><span data-part="key-label">Parent tonic</span><select data-field="key"></select></label>
+    <label>Harmony<select data-field="size"><option value="3">Triads</option><option value="4">Seventh chords</option></select></label>
+  </div>
+  <div class="mw-library" data-part="library">
+    <div data-part="table" class="mw-grid-wrap" hidden><table aria-label="Harmonized modes by degree"><thead><tr><th scope="col">Mode</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th><th scope="col">4</th><th scope="col">5</th><th scope="col">6</th><th scope="col">7</th></tr></thead><tbody data-part="matrix"></tbody></table></div>
+    <div class="mw-wheel-stack" data-part="circle">
+      <div class="mw-wheel" data-part="wheel" role="group" aria-label="Select a key, clockwise in fifths from C">
+        <div data-part="wheel-keys"></div>
+        <div class="mw-wheel-hub" aria-hidden="true"><strong data-part="hub-tonic"></strong><span data-part="hub-mode"></span></div>
+      </div>
+      <div class="mw-wheel-chords" data-part="wheel-chords" role="group" aria-label="Audition or drag a chord"></div>
+    </div>
+    <div class="mw-wheel-context" data-part="wheel-context">
+      <label>Mode<select data-field="wheel-mode"></select></label>
+      <p data-part="scale-notes" aria-live="polite"></p>
+      <p>Choose a key on the rim. Click a chord to hear it, or drag it into the progression.</p>
+    </div>
+    <div class="mw-selection"><span data-part="choice" aria-live="polite"></span><button type="button" data-action="add">Add to progression</button></div>
+  </div>
+  <section class="mw-editor" aria-label="Progression editor">
+    <div class="mw-top"><h2>Progression</h2><span data-part="count">0 bars · 4/4</span></div>
+    <div class="mw-transport">
+      <button type="button" data-action="play">Play</button>
+      <button type="button" data-action="play-scale" aria-pressed="false">Play scale</button>
+      <button type="button" data-action="stop">Stop</button>
+      <label>Tempo <input data-field="bpm" type="number" inputmode="numeric" min="40" max="240" value="100" aria-label="Tempo in beats per minute"> BPM</label>
+    </div>
+    <div data-part="track" class="mw-track" aria-label="Bars"></div>
+    <div data-part="empty" class="mw-empty"><strong>Drop a chord here</strong><button data-action="example" type="button">Try the eight-bar example</button><button data-action="tonicization-example" type="button">Try C → E7 → Am → G7</button></div>
+    <div data-part="inspector" class="mw-inspector" hidden>
+      <p data-part="bar-detail"></p>
+      <p data-part="resolution" class="mw-scale-analysis"></p>
+      <p data-part="scale-ideas" class="mw-scale-analysis"></p>
+      <output class="mw-voicing-notes" data-part="voicing-notes" aria-live="polite"></output>
+      <div class="mw-actions"><button data-action="earlier" type="button">Move earlier</button><button data-action="later" type="button">Move later</button><button data-action="remove" type="button">Remove chord</button></div>
+      <details>
+        <summary>Key or mode change</summary>
+        <div class="mw-tools">
+          <label>Tonic<select data-field="mark-key"></select></label>
+          <label>Scale<select data-field="mark-scale"></select></label>
+          <label>Mode<select data-field="mark-mode"></select></label>
+          <button type="button" data-action="mark">Set key from here</button>
+          <button type="button" data-action="label-chord">Label this chord only</button>
+          <button type="button" data-action="unmark">Remove marker</button>
+        </div>
+      </details>
+    </div>
+    <dialog class="mw-chord-settings" data-part="chord-settings" aria-labelledby="mw-settings-title">
+      <header class="mw-settings-header">
+        <div><h2 id="mw-settings-title">Chord settings</h2><p data-part="settings-context"></p></div>
+        <button type="button" data-action="close-settings" autofocus>Done</button>
+      </header>
+      <div class="mw-settings-readout">
+        <strong data-part="settings-symbol"></strong>
+        <output data-part="settings-notes" aria-live="polite"></output>
+      </div>
+      <div class="mw-scale-preview">
+        <label>Scale idea<select data-field="settings-scale"></select></label>
+        <p data-part="settings-scale-parent" class="mw-settings-help"></p>
+        <p data-part="settings-scale-note" class="mw-settings-help" aria-live="polite"></p>
+      </div>
+      <div class="mw-piano-legend">
+        <span class="mw-legend-chord">Sounding in scale</span><span class="mw-legend-scale">In scale</span>
+        <span class="mw-legend-outside">Out of scale</span><span class="mw-legend-outside-sounding">Sounding out of scale</span>
+      </div>
+      <div class="mw-piano-scroll">
+        <div class="mw-piano" data-part="piano" role="group" aria-label="Two-octave piano"></div>
+      </div>
+      <p class="mw-settings-help">Tap a key to add or remove a note. Original chord tones follow the inversion.</p>
+      <p class="mw-settings-help mw-piano-scroll-hint">Swipe the piano to reach the second octave.</p>
+      <div class="mw-settings-controls">
+        <div><h3>Extensions</h3><div class="mw-extension-actions" data-part="extensions" role="group" aria-label="In-scale extensions"></div></div>
+        <div data-part="settings-voicing" class="mw-settings-voicing"></div>
+      </div>
+      <div class="mw-settings-footer">
+        <button type="button" data-action="preview-chord">Play chord</button>
+        <button type="button" data-action="clear-extensions">Clear added notes</button>
+      </div>
+      <p data-part="settings-message" class="mw-message" role="status"></p>
+    </dialog>
+    <p data-part="message" class="mw-message" role="status"></p>
+  </section>
+</section>
+</body>
+</html>
